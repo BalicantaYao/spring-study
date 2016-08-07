@@ -3,9 +3,14 @@
  */
 package week1.spring.example;
 
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 
 /**
  * The <code> SpringApplication </code>
@@ -15,22 +20,51 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class SpringApplication {
 
-    private ApplicationContext context;
+    public static final String BEANS_XML = "Beans.xml";
 
     public static void main(String[] args) {
-        ApplicationContext context = getAnnotationContext();
 
+        printComputerNameFromAnnotationContext();
+
+        printComputerNameFromClassPathXmlContext();
+
+        printComputerNameFromBeanFactory();
+
+    }
+
+    private static void printComputerNameFromBeanFactory() {
+        BeanFactory beanFactory = getBeanFactory();
+        Computer bean = beanFactory.getBean(Computer.class);
+        System.out.println("Computer name is " + bean.getName());
+    }
+
+    private static void printComputerNameFromAnnotationContext() {
+        ApplicationContext context = getAnnotationContext();
+        Computer computer = context.getBean(Computer.class);
+        String name = computer.getName();
+        System.out.println("Computer name is " + name);
+    }
+
+    private static void printComputerNameFromClassPathXmlContext() {
+        ApplicationContext context = getAnnotationContext();
         Computer computer = context.getBean(Computer.class);
         String name = computer.getName();
         System.out.println("Computer name is " + name);
     }
 
     private static ApplicationContext getClassPathXmlContext(){
-        return new ClassPathXmlApplicationContext("Beans.xml");
+        return new ClassPathXmlApplicationContext(BEANS_XML);
     }
 
     private static ApplicationContext getAnnotationContext(){
         return new AnnotationConfigApplicationContext(Config.class);
-//        return new AnnotationConfigApplicationContext("week1");
+    }
+
+    private static BeanFactory getBeanFactory(){
+        Resource resource = new ClassPathResource(BEANS_XML);
+        DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
+        XmlBeanDefinitionReader xmlBeanDefinitionReader = new XmlBeanDefinitionReader(beanFactory);
+        xmlBeanDefinitionReader.loadBeanDefinitions(resource);
+        return beanFactory;
     }
 }
