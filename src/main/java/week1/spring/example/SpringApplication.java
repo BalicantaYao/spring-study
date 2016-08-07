@@ -46,7 +46,7 @@ public class SpringApplication {
     }
 
     private static void printComputerNameFromClassPathXmlContext() {
-        ApplicationContext context = getAnnotationContext();
+        ApplicationContext context = getClassPathXmlContext();
         Computer computer = context.getBean(Computer.class);
         String name = computer.getName();
         System.out.println("Computer name is " + name);
