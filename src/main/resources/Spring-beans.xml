@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright (c) Lab317, Inc All Rights Reserved.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <alias name="mydog" alias="yourdog"/>
+
+    <bean name="mydog" class="week2.beans.Dog"/>
+    <bean name="mySecondDog" class="week2.beans.Dog" />
+    <bean name="dogFactory" class="week2.beans.DogFactory"/>
+
+    <bean id="staticFactoryDog"
+          class="week2.beans.DogFactory"
+          factory-method="createDog"/>
+
+    <bean id="animalFactory"
+          class="week2.beans.AnimalFactory"/>
+
+    <bean id="beanFactoryDog"
+          factory-bean="animalFactory"
+          factory-method="createDog"/>
+
+    <bean id="beanFactoryCat"
+          factory-bean="animalFactory"
+          factory-method="createCat"/>
+</beans>
